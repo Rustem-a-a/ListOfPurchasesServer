@@ -1,0 +1,12 @@
+{
+  "serverPort": 5000,
+  "database" : "mongodb+srv://RustemAbdulaev:bekrustemdog@cluster0.wlxwr46.mongodb.net/?retryWrites=true&w=majority",
+  "ACCESS_SECRET" : "ACCESS key for list-shopping",
+  "REFRESH_SECRET" : "REFRESH key for list-shopping",
+  "SMTP_HOST" : "smtp.mail.ru",
+  "SMTP_PORT" : 465,
+  "SMTP_USER" : "abdulaev_rustem@mail.ru",
+  "SMTP_PASSWORD" : "bekrustemdog",
+  "URL": "http://localhost:5000",
+  "URL_FRONT" : "http://localhost:3000/"
+}
