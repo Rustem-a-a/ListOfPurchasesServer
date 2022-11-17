@@ -61,7 +61,7 @@ class AuthControllers {
             await TokenService.saveToken(userDto.id,tokens.refreshToken)
             res.cookie('refreshToken', tokens.refreshToken,{maxAge:30*24*60*60*1000,httpOnly:true})
             res.json({
-                userDto,
+                user: userDto,
                 ...tokens
             })
         } catch (e) {
@@ -110,7 +110,7 @@ class AuthControllers {
          await TokenService.saveToken(userDto.id,tokens.refreshToken)
          res.cookie('refreshToken', tokens.refreshToken,{maxAge:30*24*60*60*1000,httpOnly:true})
          res.json({
-             userDto,
+             user:userDto,
              ...tokens
          })
 

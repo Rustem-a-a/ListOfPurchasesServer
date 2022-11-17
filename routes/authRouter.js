@@ -13,7 +13,7 @@ router.post('/registration',
 
 router.post('/login', authControllers.login)
 
-router.post('/logout', authControllers.logout)
+router.get('/logout', authControllers.logout)
 
 router.get('/refresh',authControllers.refresh)
 

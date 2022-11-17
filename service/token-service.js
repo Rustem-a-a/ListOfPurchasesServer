@@ -4,8 +4,8 @@ import Token from "../models/token-models.js";
 
 class TokenService {
     generateToken(payload) {
-        const accessToken = jwt.sign(payload, config.get('ACCESS_SECRET'), {expiresIn: '30s'})
-        const refreshToken = jwt.sign(payload, config.get('REFRESH_SECRET'), {expiresIn: '30m'})
+        const accessToken = jwt.sign(payload, config.get('ACCESS_SECRET'), {expiresIn: '60m'})
+        const refreshToken = jwt.sign(payload, config.get('REFRESH_SECRET'), {expiresIn: '3h'})
         return {
             accessToken,
             refreshToken

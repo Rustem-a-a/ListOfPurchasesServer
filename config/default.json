@@ -8,5 +8,5 @@
   "SMTP_USER" : "abdulaev_rustem@mail.ru",
   "SMTP_PASSWORD" : "bekrustemdog",
   "URL": "http://localhost:5000",
-  "URL_FRONT" : "http://localhost:3000/"
+  "URL_FRONT" : "http://localhost:3000"
 }
