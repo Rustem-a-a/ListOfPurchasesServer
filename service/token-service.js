@@ -19,7 +19,6 @@ class TokenService {
         } catch (e) {
             return null
         }
-
     }
 
     async validateRefreshToken(refreshToken) {
@@ -37,7 +36,6 @@ class TokenService {
             tokenData.refreshToken = refreshToken
             return await tokenData.save()
         }
-
         return await Token.create({user: id, refreshToken: refreshToken})
     }
 
@@ -45,12 +43,12 @@ class TokenService {
         const removedToken = await Token.deleteOne({refreshToken})
         return removedToken
     }
-    async findToken(userId){
-        try{
+
+    async findToken(userId) {
+        try {
             const foundToken = await Token.findOne({userId})
             return foundToken
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e)
         }
     }
