@@ -9,7 +9,7 @@ export default async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1]
         if (!token) {
-           return  res.status(403).json({message: 'User is not authorized'})
+           return  res.status(403).json({message: 'User is not authorized!!'})
         }
         const decodedToken =
             await TokenService.validateAccessToken(token)
@@ -20,6 +20,6 @@ export default async (req, res, next) => {
         req.user = decodedToken
         next()
     } catch (e) {
-        res.status(403).json({message: 'User is not authorized'})
+        res.status(403).json({message: 'User is not authorized!'})
     }
 }

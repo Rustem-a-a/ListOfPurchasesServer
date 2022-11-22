@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from 'cors'
 import authRouter from "./routes/authRouter.js";
 import cookieParser from 'cookie-parser'
+import listDB  from './routes/listRouter.js'
 
 const app =express()
 app.use(express.json())
@@ -13,6 +14,7 @@ app.use(cors({
     origin: config.get("URL_FRONT")
 }))
 app.use('/auth',authRouter)
+app.use ('/db',listDB)
 const PORT =process.env.PORT || config.get('serverPort')
 
 
