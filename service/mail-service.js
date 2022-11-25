@@ -27,6 +27,19 @@ class MailService{
           })
 
     }
+
+    async sendShareMail(to,link,from,listName){
+        await this.transporter.sendMail({
+            from: config.get('SMTP_USER'),
+            to,
+            subject: `Пользователь  ${from} открыл Вам доступ к списку ${listName}`,
+            text:'',
+            html:`<div>
+                        <h1>С Вами поделились списком</h1>
+                        <a href=${link}>Перейдите по ссылке</a>
+                    </div>`
+        })
+        }
 }
 
 export default new MailService ()

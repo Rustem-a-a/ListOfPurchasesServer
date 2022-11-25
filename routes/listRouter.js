@@ -1,6 +1,7 @@
 import {Router} from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import ListDB from "../models/listDB-model.js";
+import MailService from "../service/mail-service.js";
 
 const router = new Router()
 
@@ -10,17 +11,16 @@ router.post('/listAdd', authMiddleware,
             const userID = req.user.id
             const user = await ListDB.findOne({user: userID})
             if (!user) {
-                await ListDB.create({
+                const newUser = await ListDB.create({
                     user: userID,
                     items: {
                         name: req.body.itemsName,
                         completed: req.body.completed,
                     }
                 })
-                return res.status(200).json({message: 'listDB created first!!!'})
+                return res.status(200).json({newUser})
             }
-
-            await ListDB.updateOne({user: userID}, {
+             await ListDB.updateOne({user: userID}, {
                 $push: {
                     items: {
                         name: req.body.itemsName,
@@ -28,24 +28,15 @@ router.post('/listAdd', authMiddleware,
                     }
                 }
             })
-            return res.status(200).json({message: 'listDB updated!!!'})
+            const updatedUser = await ListDB.findOne({user: userID})
+            return res.status(200).json({updatedUser})
 
         } catch (e) {
-            return res.status(405).json({message: 'listDB is not created!'})
+            return res.status(405).json({message: 'listDB is not created!!!!!!!!!'})
         }
     }
 )
 
-router.delete('/documentDelete', authMiddleware,
-    async (req, res) => {
-        try {
-            const user = await ListDB.findOne({user: req.user.id})
-            await ListDB.findByIdAndDelete(user._id)
-            return res.json({message: 'deleted'})
-        } catch (e) {
-            return res.json({message: 'not deleted'})
-        }
-    })
 
 router.patch('/paragraphChange/:id', authMiddleware, async (req, res) => {
     try {
@@ -68,13 +59,81 @@ router.patch('/paragraphChange/:id', authMiddleware, async (req, res) => {
                     arrayFilters: [{"inner._id": itemsObjectId}],
                     new: true
                 })
-            return res.status(202).json({message: 'listDB updated!!!'})
+            const updatedUser = await ListDB.findById(user.id)
+            return res.status(202).json({updatedUser})
         }
         return res.status(202).json({message: 'list is not founded!!!'})
     } catch (e) {
         return res.status(405).json({message: 'listDB is not updated!!!!!'})
     }
 })
+
+
+router.patch('/updateParagraph/:id/:paragraphId', authMiddleware, async (req, res) => {
+    try {
+        const itemsObjectParagraphId = req.params.paragraphId
+        const itemsObjectId = req.params.id
+        console.log(itemsObjectParagraphId)
+        console.log(itemsObjectId)
+        const isItemsObjectId = await ListDB.findOne({'items._id': itemsObjectId})
+        if (isItemsObjectId) {
+            console.log(isItemsObjectId)
+            const user = await ListDB.findOne({user: req.user.id})
+            console.log(user)
+            await ListDB.findByIdAndUpdate(
+                user._id,
+                {$set: {
+                    "items.$[inner].paragraph.$[itemsObjectParagraphId].completed": req.body.completed,
+                        "items.$[inner].paragraph.$[itemsObjectParagraphId].name": req.body.name
+
+                }},
+                {
+                    arrayFilters: [{"inner._id": itemsObjectId}, {"itemsObjectParagraphId._id": itemsObjectParagraphId}],
+                    new: true
+                })
+            const updatedUser = await ListDB.findById(user.id)
+            return res.status(202).json({updatedUser})
+        }
+        return res.status(202).json({message: 'list is not founded!!!'})
+    } catch (e) {
+        return res.status(405).json({message: 'listDB is not updated!!!!!'})
+    }
+})
+
+router.get('/getList', authMiddleware,
+    async (req, res) => {
+        try {
+            const user = await ListDB.findOne({user: req.user.id})
+            return res.json(user)
+        } catch (e) {
+            return res.json({message: 'not data!!!!'})
+        }
+    })
+
+router.post('/getShare',authMiddleware, async (req,res)=>{
+        try{
+            console.log('in share')
+            const userList = await ListDB.findOne({user:req.user.id})
+            console.log('in share!')
+            await MailService.sendShareMail(req.body.to,req.body.link,req.body.from,req.body.listName)
+            console.log('in share!!')
+            res.status(201).json({userList})
+        }
+        catch (e) {
+
+        }
+})
+
+router.delete('/documentDelete', authMiddleware,
+    async (req, res) => {
+        try {
+            const user = await ListDB.findOne({user: req.user.id})
+            await ListDB.findByIdAndDelete(user._id)
+            return res.json({message: 'deleted'})
+        } catch (e) {
+            return res.json({message: 'not deleted'})
+        }
+    })
 
 
 router.delete('/listDelete/:id', authMiddleware, async (req, res) => {
@@ -85,7 +144,6 @@ router.delete('/listDelete/:id', authMiddleware, async (req, res) => {
             {$pull: {items: {_id: req.params.id}}})
         return res.status(202).json({message: 'listDB updated!!!'})
 
-        return res.status(202).json({message: 'list is not founded!!!'})
     } catch (e) {
         return res.status(405).json({message: 'listDB is not updated!!!!!'})
     }
@@ -108,39 +166,13 @@ router.delete('/deleteParagraph/:id/:paragraphId', authMiddleware, async (req, r
                     arrayFilters: [{"inner._id": itemsObjectId}],
                     new: true
                 })
-            return res.status(202).json({message: 'listDB updated!!!'})
+            const updatedUser = await ListDB.findById(user.id)
+            return res.status(202).json({updatedUser})
         }
         return res.status(202).json({message: 'list is not founded!!!'})
     } catch (e) {
         return res.status(405).json({message: 'listDB is not updated!!!!!'})
     }
 })
-
-router.patch('/updateParagraph/:id/:paragraphId', authMiddleware, async (req, res) => {
-    try {
-        const itemsObjectParagraphId = req.params.paragraphId
-        const itemsObjectId = req.params.id
-        console.log(itemsObjectParagraphId)
-        console.log(itemsObjectId)
-        const isItemsObjectId = await ListDB.findOne({'items._id': itemsObjectId})
-        if (isItemsObjectId) {
-            console.log(isItemsObjectId)
-            const user = await ListDB.findOne({user: req.user.id})
-            console.log(user)
-            await ListDB.findByIdAndUpdate(
-                user._id,
-                {$set: {"items.$[inner].paragraph.$[itemsObjectParagraphId].name": "arsen"}},
-                {
-                    arrayFilters: [{"inner._id": itemsObjectId}, {"itemsObjectParagraphId._id": itemsObjectParagraphId}],
-                    new: true
-                })
-            return res.status(202).json({message: 'listDB updated!!!'})
-        }
-        return res.status(202).json({message: 'list is not founded!!!'})
-    } catch (e) {
-        return res.status(405).json({message: 'listDB is not updated!!!!!'})
-    }
-})
-
 
 export default router

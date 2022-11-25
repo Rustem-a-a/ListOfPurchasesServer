@@ -1,5 +1,4 @@
 import {Schema, model, SchemaTypes} from "mongoose";
-import {ObjectId} from "mongodb";
 
 const ListDB = new Schema({
     user:{type:SchemaTypes.ObjectId,ref:'User'},
