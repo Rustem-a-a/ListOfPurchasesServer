@@ -11,14 +11,14 @@ router.post('/listAdd', authMiddleware,
             const userID = req.user.id
             const user = await ListDB.findOne({user: userID})
             if (!user) {
-                const newUser = await ListDB.create({
+                const updatedList = await ListDB.create({
                     user: userID,
                     items: {
                         name: req.body.itemsName,
                         completed: req.body.completed,
                     }
                 })
-                return res.status(200).json({newUser})
+                return res.status(200).json({updatedList})
             }
              await ListDB.updateOne({user: userID}, {
                 $push: {
@@ -28,8 +28,8 @@ router.post('/listAdd', authMiddleware,
                     }
                 }
             })
-            const updatedUser = await ListDB.findOne({user: userID})
-            return res.status(200).json({updatedUser})
+            const updatedList = await ListDB.findOne({user: userID})
+            return res.status(200).json({updatedList})
 
         } catch (e) {
             return res.status(405).json({message: 'listDB is not created!!!!!!!!!'})
@@ -103,8 +103,9 @@ router.patch('/updateParagraph/:id/:paragraphId', authMiddleware, async (req, re
 router.get('/getList', authMiddleware,
     async (req, res) => {
         try {
-            const user = await ListDB.findOne({user: req.user.id})
-            return res.json(user)
+            const userList = await ListDB.findOne({user: req.user.id})
+            console.log(userList)
+            return res.json({userList})
         } catch (e) {
             return res.json({message: 'not data!!!!'})
         }
