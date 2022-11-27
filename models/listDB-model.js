@@ -14,6 +14,7 @@ const ListDB = new Schema({
             ]
         }
 
-    ]
+    ],
+    sharedItems:[{type:String}]
 })
 export default model("ListDB",ListDB)

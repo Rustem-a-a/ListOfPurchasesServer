@@ -16,7 +16,7 @@ class AuthControllers {
                 return res.status(400).json({message: "error registration " + validateErrors.errors.map(i => `${i.param} ${i.msg}`)})
             }
 
-            const {username, password,email} = req.body
+            const {username, password} = req.body
             const candidate = await User.findOne({username})
             if (candidate) {
                 return res.json({message: 'user with this name has already created'})
@@ -31,7 +31,7 @@ class AuthControllers {
                 activationLink
             })
             await user.save()
-            await MailService.sendActivationMail(email,`${config.get('URL')}/auth/activate/${activationLink}`)
+            await MailService.sendActivationMail(username,`${config.get('URL')}/auth/activate/${activationLink}`)
             const userDto = new UserDto(user)
             const tokens = TokenService.generateToken({...userDto})
             await TokenService.saveToken(userDto.id,tokens.refreshToken)
@@ -68,18 +68,7 @@ class AuthControllers {
             res.status(400).json({message: 'login error'})
         }
     }
-    // async authorization(req,res){
-    //     try{
-    //         const user = await User.findOne({_id:req.user._id})
-    //         const token = generateToken(user._id)
-    //         res.json({
-    //             user,
-    //             token
-    //         })}
-    //   catch (e) {
-    //       console.log(e,'unknown  error')
-    //   }
-    // }
+
     async logout(req,res){
         try{
             const {refreshToken} = req.cookies

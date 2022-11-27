@@ -42,7 +42,6 @@ router.patch('/paragraphChange/:id', authMiddleware, async (req, res) => {
     try {
         const itemsObjectId = req.params.id
         const isItemsObjectId = await ListDB.findOne({'items._id': itemsObjectId})
-        console.log(isItemsObjectId)
         if (isItemsObjectId) {
             const user = await ListDB.findOne({user: req.user.id})
             await ListDB.findByIdAndUpdate(
@@ -67,6 +66,35 @@ router.patch('/paragraphChange/:id', authMiddleware, async (req, res) => {
         return res.status(405).json({message: 'listDB is not updated!!!!!'})
     }
 })
+
+//
+// router.patch('/sharedItems/:id', authMiddleware, async (req, res) => {
+//     try {
+//         const itemsObjectId = req.params.id
+//         const isItemsObjectId = await ListDB.findOne({'items._id': itemsObjectId})
+//         if (isItemsObjectId) {
+//             const user = await ListDB.findOne({user: req.user.id})
+//             await ListDB.findByIdAndUpdate(
+//                 user._id,
+//                 {
+//                     $push: {sharedItems: {
+//                             "name": req.body.paragraphName,
+//                             "completed": req.body.completed
+//                         }
+//                     }
+//                 },
+//                 {
+//                     arrayFilters: [{"inner._id": itemsObjectId}],
+//                     new: true
+//                 })
+//             const updatedUser = await ListDB.findById(user.id)
+//             return res.status(202).json({updatedUser})
+//         }
+//         return res.status(202).json({message: 'list is not founded!!!'})
+//     } catch (e) {
+//         return res.status(405).json({message: 'listDB is not updated!!!!!'})
+//     }
+// })
 
 
 router.patch('/updateParagraph/:id/:paragraphId', authMiddleware, async (req, res) => {
@@ -100,6 +128,9 @@ router.patch('/updateParagraph/:id/:paragraphId', authMiddleware, async (req, re
     }
 })
 
+
+
+
 router.get('/getList', authMiddleware,
     async (req, res) => {
         try {
@@ -111,7 +142,8 @@ router.get('/getList', authMiddleware,
         }
     })
 
-router.post('/getShare',authMiddleware, async (req,res)=>{
+
+router.post('/postShare',authMiddleware, async (req,res)=>{
         try{
             console.log('in share')
             const userList = await ListDB.findOne({user:req.user.id})
