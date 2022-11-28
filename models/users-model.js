@@ -5,7 +5,7 @@ const User = new Schema({
     password:{type:String, required: true},
     avatar:{type:String,default:null},
     roles:[{type:String,ref:"Role"}],
-    isActivated:{type:String, required:true,default: false},
+    isActivated:{type:Boolean, required:true,default: false},
     activationLink:{type:String, required:true}
 })
 

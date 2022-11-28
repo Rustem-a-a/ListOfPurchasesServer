@@ -175,7 +175,8 @@ router.delete('/listDelete/:id', authMiddleware, async (req, res) => {
         await ListDB.findByIdAndUpdate(
             user._id,
             {$pull: {items: {_id: req.params.id}}})
-        return res.status(202).json({message: 'listDB updated!!!'})
+        const updatedUser = await ListDB.findById(user.id)
+        return res.status(202).json({updatedUser})
 
     } catch (e) {
         return res.status(405).json({message: 'listDB is not updated!!!!!'})

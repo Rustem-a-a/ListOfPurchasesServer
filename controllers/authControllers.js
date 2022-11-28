@@ -13,13 +13,13 @@ class AuthControllers {
             const validateErrors = validationResult(req)
             if (!validateErrors.isEmpty()) {
                 console.log(validateErrors)
-                return res.status(400).json({message: "error registration " + validateErrors.errors.map(i => `${i.param} ${i.msg}`)})
+                return res.status(400).json({message: "error registration " + validateErrors?.errors?.map(i => `${i.param} ${i.msg}`)})
             }
 
             const {username, password} = req.body
             const candidate = await User.findOne({username})
             if (candidate) {
-                return res.json({message: 'user with this name has already created'})
+                return res.status(400).json({message: 'user with this name existed'})
             }
             const hashPassword = bcrypt.hashSync(password, 7) // or const hashPassword = await bcrypt.hash(password, 7)
             const userRole = await Role.findOne({value: "USER"})
@@ -36,6 +36,7 @@ class AuthControllers {
             const tokens = TokenService.generateToken({...userDto})
             await TokenService.saveToken(userDto.id,tokens.refreshToken)
             res.cookie('refreshToken',tokens.refreshToken,{maxAge:30*24*60*60*1000,httpOnly:true})
+            console.log(userDto)
             return res.json(
                 {   user:userDto,
                     ...tokens
