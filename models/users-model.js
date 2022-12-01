@@ -9,4 +9,4 @@ const User = new Schema({
     activationLink:{type:String, required:true}
 })
 
-export default model('Users',User)
+export default model('User',User)
