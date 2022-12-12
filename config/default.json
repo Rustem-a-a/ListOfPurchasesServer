@@ -7,6 +7,6 @@
   "SMTP_PORT" : 465,
   "SMTP_USER" : "abdulaev_rustem@mail.ru",
   "SMTP_PASSWORD" : "bekrustemdog",
-  "URL": "http://localhost:5000",
+  "URL": "https://listofpurchasesserver.onrender.com",
   "URL_FRONT" : "https://rustemabdulaev.github.io"
 }
