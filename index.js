@@ -9,11 +9,11 @@ import listDB  from './routes/listRouter.js'
 const app =express()
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
-//     {
-//     credentials:true,
-//     origin: config.get("URL_FRONT")
-// }))
+app.use(cors(
+    {
+    credentials:true,
+    origin: config.get("URL_FRONT")
+}))
 app.use('/auth',authRouter)
 app.use ('/db',listDB)
 const PORT =process.env.PORT || config.get('serverPort')
