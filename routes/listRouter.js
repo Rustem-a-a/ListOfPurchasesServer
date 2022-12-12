@@ -277,28 +277,6 @@ router.delete('/deleteParagraph/:id/:paragraphId/:isOwnItem', authMiddleware, as
     }
 })
 
-
-
-// const result = await ListDB.find({$or:
-//     [
-//         {items:{$elemMatch:{_id:arr[0]}}},
-//         {items:{$elemMatch:{_id:arr[1]}}}
-//     ]
-//     }
-//
-// )
-
-// router.delete('/shareDeleteParagraph/:id/:paragraphId', authMiddleware, async (req, res) => {
-//     try {
-//         const itemsObjectParagraphId = req.params.paragraphId
-//         const itemsObjectId = req.params.id
-//
-//     } catch (e) {
-//         return res.status(405).json({message: 'listDB is not updated!!!!!'})
-//     }
-// })
-
-
 router.patch('/shareParagraphChange/:id', authMiddleware, async (req, res) => {
     try {
         const itemsObjectId = req.params.id
@@ -334,34 +312,6 @@ router.patch('/shareUpdateParagraph/:id/:paragraphId', authMiddleware, async (re
         return res.status(405).json({message: 'listDB is not updated!!!!!'})
     }
 })
-
-
-// router.delete('/deleteParagraph/:id/:paragraphId/:isOwnItem', authMiddleware, async (req, res) => {
-//     try {
-//         const itemsObjectParagraphId = req.params.paragraphId
-//         const itemsObjectId = req.params.id
-//         console.log(1111)
-//         const isOwnItem = req.params.isOwnItem
-//         console.log(isOwnItem)
-//         const isItemsObjectId = await ListDB.findOne({'items._id': itemsObjectId})
-//         if (isItemsObjectId) {
-//             const user = await ListDB.findOne({user: req.user.id})
-//             await ListDB.findByIdAndUpdate(
-//                 user._id,
-//                 {$pull: {"items.$[inner].paragraph": {_id: itemsObjectParagraphId}}},
-//                 {
-//                     arrayFilters: [{"inner._id": itemsObjectId}],
-//                     new: true
-//                 })
-//             const updatedUser = await ListDB.findById(user.id)
-//             return res.status(202).json({updatedUser})
-//         }
-//         return res.status(202).json({message: 'list is not founded!!!'})
-//     } catch (e) {
-//         return res.status(405).json({message: 'listDB is not updated!!!!!'})
-//     }
-// })
-
 
 
 export default router
