@@ -12,7 +12,8 @@ app.use(cookieParser())
 app.use(cors(
     {
     credentials:true,
-    origin: config.get("URL_FRONT")
+    origin:  'https://rustem-a-a.github.io'
+    // origin: config.get("URL_FRONT")
 }))
 app.use('/auth',authRouter)
 app.use ('/db',listDB)
