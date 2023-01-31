@@ -8,5 +8,5 @@
   "SMTP_USER" : "abdulaev_rustem@mail.ru",
   "SMTP_PASSWORD" : "bekrustemdog",
   "URL": "https://listofpurchasesserver.onrender.com",
-  "URL_FRONT" : "https://rustemabdulaev.github.io"
+  "URL_FRONT" : "http://localhost:3000"
 }
